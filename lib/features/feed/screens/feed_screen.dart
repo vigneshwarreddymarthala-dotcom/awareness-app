@@ -80,7 +80,7 @@ class _FeedScreenState extends State<FeedScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Awareness Feed')),
+      appBar: AppBar(title: const Text('Awareness Feed 🚀')),
 
       body: loading
           ? const Center(child: CircularProgressIndicator())
