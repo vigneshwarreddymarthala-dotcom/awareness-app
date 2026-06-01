@@ -4,6 +4,7 @@ import '../../../core/services/session_service.dart';
 import '../../../core/utils/auth_guard.dart';
 import '../../../models/post_model.dart';
 import '../services/post_service.dart';
+import '../../profile/screens/user_profile_screen.dart';
 
 class PostCard extends StatefulWidget {
   final PostModel post;
@@ -31,6 +32,19 @@ class _PostCardState extends State<PostCard> {
   Color get _categoryColor =>
       _categoryColors[widget.post.category] ?? const Color(0xFF6C63FF);
 
+  void _openProfile(BuildContext context) {
+    if (!SessionService.isLoggedIn()) {
+      showAuthDialog(context);
+      return;
+    }
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => UserProfileScreen(userEmail: widget.post.userEmail),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final color = _categoryColor;
@@ -38,11 +52,11 @@ class _PostCardState extends State<PostCard> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
-            color: const Color(0x0F000000),
+            color: Color(0x0F000000),
             blurRadius: 12,
-            offset: const Offset(0, 4),
+            offset: Offset(0, 4),
           ),
         ],
       ),
@@ -137,40 +151,55 @@ class _PostCardState extends State<PostCard> {
 
                 const SizedBox(height: 14),
 
-                // Footer: author avatar + vote button
+                // Footer: tappable author + vote button
                 Row(
                   children: [
-                    CircleAvatar(
-                      radius: 14,
-                      backgroundColor: Color.fromARGB(
-                        40,
-                        color.r.toInt(),
-                        color.g.toInt(),
-                        color.b.toInt(),
-                      ),
-                      child: Text(
-                        widget.post.userEmail.isNotEmpty
-                            ? widget.post.userEmail[0].toUpperCase()
-                            : '?',
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.bold,
-                          color: color,
-                        ),
+                    // Author — tappable → profile
+                    GestureDetector(
+                      onTap: () => _openProfile(context),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CircleAvatar(
+                            radius: 14,
+                            backgroundColor: Color.fromARGB(
+                              40,
+                              color.r.toInt(),
+                              color.g.toInt(),
+                              color.b.toInt(),
+                            ),
+                            child: Text(
+                              widget.post.userEmail.isNotEmpty
+                                  ? widget.post.userEmail[0].toUpperCase()
+                                  : '?',
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                                color: color,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          ConstrainedBox(
+                            constraints: const BoxConstraints(maxWidth: 140),
+                            child: Text(
+                              widget.post.userEmail,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey.shade600,
+                                decoration: TextDecoration.underline,
+                                decorationColor: Colors.grey.shade400,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        widget.post.userEmail,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey.shade500,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
+
+                    const Spacer(),
+
+                    // Vote button
                     GestureDetector(
                       onTap: loading
                           ? null
