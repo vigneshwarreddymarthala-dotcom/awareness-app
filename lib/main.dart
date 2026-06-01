@@ -3,7 +3,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'core/navigation/main_navigation.dart';
 import 'core/services/session_service.dart';
-import 'features/auth/screens/login_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,7 +29,7 @@ class AwarenessApp extends StatelessWidget {
 
       theme: ThemeData(primarySwatch: Colors.blue),
 
-      home: SessionService.isLoggedIn() ? MainNavigation() : LoginScreen(),
+      home: const MainNavigation(),
     );
   }
 }

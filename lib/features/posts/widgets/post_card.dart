@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/services/session_service.dart';
+import '../../../core/utils/auth_guard.dart';
 import '../../../models/post_model.dart';
 import '../services/post_service.dart';
 
@@ -77,6 +79,11 @@ class _PostCardState extends State<PostCard> {
                     onPressed: loading
                         ? null
                         : () async {
+                            if (!SessionService.isLoggedIn()) {
+                              showAuthDialog(context);
+                              return;
+                            }
+
                             setState(() {
                               loading = true;
                             });

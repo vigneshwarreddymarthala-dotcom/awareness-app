@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/services/supabase_service.dart';
+import '../../../core/services/session_service.dart';
+import '../../../core/utils/auth_guard.dart';
 import '../../../models/post_model.dart';
 import '../../posts/screens/post_detail_screen.dart';
 import '../../posts/widgets/post_card.dart';
@@ -99,6 +101,10 @@ class _FeedScreenState extends State<FeedScreen> {
 
                   child: GestureDetector(
                     onTap: () {
+                      if (!SessionService.isLoggedIn()) {
+                        showAuthDialog(context);
+                        return;
+                      }
                       Navigator.push(
                         context,
 

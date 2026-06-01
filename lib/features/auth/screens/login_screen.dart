@@ -27,10 +27,15 @@ class _LoginScreenState extends State<LoginScreen> {
     if (success) {
       await SessionService.login(email);
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const MainNavigation()),
-      );
+      if (!mounted) return;
+      if (Navigator.canPop(context)) {
+        Navigator.pop(context);
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const MainNavigation()),
+        );
+      }
     } else {
       setState(() {
         error = 'Invalid email or password';

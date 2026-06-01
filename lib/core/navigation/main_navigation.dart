@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../../features/feed/screens/feed_screen.dart';
 import '../../features/posts/screens/create_post_screen.dart';
 import '../../features/profile/screens/profile_screen.dart';
+import '../../core/services/session_service.dart';
+import '../../core/utils/auth_guard.dart';
 
 class MainNavigation extends StatefulWidget {
   const MainNavigation({super.key});
@@ -31,6 +33,10 @@ class _MainNavigationState extends State<MainNavigation> {
         currentIndex: currentIndex,
 
         onTap: (index) {
+          if (index != 0 && !SessionService.isLoggedIn()) {
+            showAuthDialog(context);
+            return;
+          }
           setState(() {
             currentIndex = index;
           });
