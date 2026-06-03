@@ -37,6 +37,9 @@ class _FeedScreenState extends State<FeedScreen> {
               userEmail: post['user_email'],
               usefulCount: post['useful_count'] ?? 0,
               usefulVotes: post['useful_votes'] ?? [],
+              createdAt: post['created_at'] != null
+                  ? DateTime.tryParse(post['created_at'].toString())
+                  : null,
             );
           }).toList();
           setState(() {

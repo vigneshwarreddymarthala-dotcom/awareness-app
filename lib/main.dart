@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'core/navigation/main_navigation.dart';
-import 'core/services/session_service.dart';
+import 'core/services/local_auth_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,7 +12,8 @@ Future<void> main() async {
     anonKey: 'sb_publishable_9yhOZKG1o0mh1_3WB84rYQ_ktfm7Q7F',
   );
 
-  await SessionService.loadSession();
+  // Load local auth state from localStorage on startup
+  await LocalAuthService.init();
 
   runApp(const AwarenessApp());
 }
@@ -24,16 +25,14 @@ class AwarenessApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-
       title: 'Awareness App',
-
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color(0xFF6C63FF),
           brightness: Brightness.light,
         ),
-        scaffoldBackgroundColor: const Color(0xFFF4F6FB),
+        scaffoldBackgroundColor: const Color(0xFFF0F2F8),
         appBarTheme: const AppBarTheme(
           backgroundColor: Color(0xFF6C63FF),
           foregroundColor: Colors.white,
@@ -57,7 +56,6 @@ class AwarenessApp extends StatelessWidget {
           ),
         ),
       ),
-
       home: const MainNavigation(),
     );
   }

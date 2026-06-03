@@ -1,31 +1,15 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import 'local_auth_service.dart';
 
 class SessionService {
-  static String? currentUserEmail;
+  static String? get currentUserEmail => LocalAuthService.currentEmail;
 
-  static Future<void> login(String email) async {
-    currentUserEmail = email;
+  // Full name not stored in local auth — fall back to email
+  static String? get currentUserFullName => LocalAuthService.currentEmail;
 
-    final prefs = await SharedPreferences.getInstance();
+  static bool isLoggedIn() => LocalAuthService.isLoggedIn;
 
-    await prefs.setString('currentUserEmail', email);
-  }
-
-  static Future<void> logout() async {
-    currentUserEmail = null;
-
-    final prefs = await SharedPreferences.getInstance();
-
-    await prefs.remove('currentUserEmail');
-  }
-
-  static Future<void> loadSession() async {
-    final prefs = await SharedPreferences.getInstance();
-
-    currentUserEmail = prefs.getString('currentUserEmail');
-  }
-
-  static bool isLoggedIn() {
-    return currentUserEmail != null;
-  }
+  // No-ops kept for call-site compatibility
+  static Future<void> loadSession() async {}
+  static Future<void> login(String email) async {}
+  static Future<void> logout() async {}
 }

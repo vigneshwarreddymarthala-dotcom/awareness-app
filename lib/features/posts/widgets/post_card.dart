@@ -32,6 +32,15 @@ class _PostCardState extends State<PostCard> {
   Color get _categoryColor =>
       _categoryColors[widget.post.category] ?? const Color(0xFF6C63FF);
 
+  static String _maskedName(String email) {
+    final prefix = email.split('@').first;
+    if (prefix.isEmpty) return 'Anonymous';
+    final visible = prefix.length >= 3
+        ? prefix.substring(0, 2)
+        : prefix.substring(0, 1);
+    return '${visible.toLowerCase()}****';
+  }
+
   void _openProfile(BuildContext context) {
     if (!SessionService.isLoggedIn()) {
       showAuthDialog(context);
@@ -180,17 +189,12 @@ class _PostCardState extends State<PostCard> {
                             ),
                           ),
                           const SizedBox(width: 6),
-                          ConstrainedBox(
-                            constraints: const BoxConstraints(maxWidth: 140),
-                            child: Text(
-                              widget.post.userEmail,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.grey.shade600,
-                                decoration: TextDecoration.underline,
-                                decorationColor: Colors.grey.shade400,
-                              ),
+                          Text(
+                            _maskedName(widget.post.userEmail),
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.grey.shade600,
                             ),
                           ),
                         ],

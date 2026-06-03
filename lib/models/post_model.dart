@@ -5,10 +5,9 @@ class PostModel {
   final String category;
   final String story;
   final String userEmail;
-
   final int usefulCount;
-
   final List<dynamic> usefulVotes;
+  final DateTime? createdAt;
 
   PostModel({
     required this.id,
@@ -17,8 +16,8 @@ class PostModel {
     required this.category,
     required this.story,
     required this.userEmail,
-
     required this.usefulCount,
     required this.usefulVotes,
+    this.createdAt,
   });
 }
